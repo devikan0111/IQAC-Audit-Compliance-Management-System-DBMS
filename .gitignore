@@ -1,0 +1,21 @@
+# Node / Next.js (for the web app in Step 7)
+node_modules/
+.next/
+out/
+npm-debug.log*
+
+# Secrets: never commit these
+.env
+.env.local
+.env.*.local
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
