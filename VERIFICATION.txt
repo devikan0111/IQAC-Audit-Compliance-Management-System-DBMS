@@ -1,0 +1,9 @@
+Checked on 25 October 2026
+PASS: 31 local tests covering permissions, passwords, SQL parsing, seed links, scoring, reports and CSV.
+PASS: 11 live MySQL check groups using a disposable QA schema, including triggers, scoring and restricted-account row locks.
+PASS: production Next.js webpack build.
+PASS: MongoDB validation and duplicate-link rejection; authenticated API integration covering SQL/Mongo CRUD, role restrictions, review history, automatic scores and logout, using disposable QA databases.
+Expected original seed scores: CSE 31.25, ECE 19.50, ME 0.00 out of 100.
+The user confirmed that the sign-in page opens. Browser checking found an initial report cycle-selection issue; fixed to select a cycle when dashboard data arrives.
+Originality and the team's ER diagram require the team's own review. No claim of awarded rubric marks or independently originated novelty is made.
+PASS: browser sign-in and all three report tabs show actual seeded data; weighted scores displayed CSE 31.25, ECE 19.50 and ME 0.00. Report layout visually inspected.

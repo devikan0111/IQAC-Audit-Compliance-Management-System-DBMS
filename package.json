@@ -1,0 +1,28 @@
+{
+  "name": "iqac-portal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --webpack --hostname 127.0.0.1",
+    "build": "next build --webpack",
+    "start": "next start --hostname 127.0.0.1",
+    "test": "node --test tests/*.test.js",
+    "db:setup": "node --env-file=.env.local scripts/setup.mjs",
+    "evidence:sync": "node --env-file=.env.local scripts/sync.mjs",
+    "test:integration": "node scripts/integration.mjs",
+    "test:mongo": "node --env-file=.env.local scripts/mongo-tests.mjs",
+    "db:bootstrap": "node --env-file=.env.local scripts/bootstrap.mjs",
+    "db:mongo": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mongo-local.ps1",
+    "test:sql": "node --env-file=.env.local scripts/sql-qa.mjs",
+    "demo": "node --env-file=.env.local scripts/demo.mjs",
+    "test:demo": "node --env-file=.env.local scripts/integration-sandbox.mjs"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "mysql2": "^3.15.0",
+    "mongodb": "^6.20.0"
+  }
+}

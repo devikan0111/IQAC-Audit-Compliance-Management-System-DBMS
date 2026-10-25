@@ -1,0 +1,35 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {reportDefinitions,reportCsv} from '../lib/reports.js';
+
+export default function Reports({data,request,onError}){
+ const [cycle,setCycle]=useState(String(data.cycles.find(c=>c.status==='Active')?.cycle_id??data.cycles[0]?.cycle_id??''));
+ useEffect(()=>{if(!cycle&&data.cycles.length)setCycle(String(data.cycles.find(c=>c.status==='Active')?.cycle_id??data.cycles[0].cycle_id))},[cycle,data.cycles]);
+ const [kind,setKind]=useState('approved'),[result,setResult]=useState(null),[loading,setLoading]=useState(false),[error,setError]=useState(''),[revision,setRevision]=useState(0);
+ useEffect(()=>{
+  if(!cycle)return;
+  let alive=true;setLoading(true);setError('');setResult(null);
+  request('reports?cycle_id='+encodeURIComponent(cycle)).then(value=>{if(alive)setResult(value)}).catch(e=>{if(alive){setError(e.message);if(e.status===401)onError(e)}}).finally(()=>{if(alive)setLoading(false)});
+  return ()=>{alive=false};
+ },[cycle,revision,request,onError]);
+ const selected=data.cycles.find(c=>String(c.cycle_id)===cycle),definition=reportDefinitions[kind],rows=result?.[kind]??[];
+ const totals=result?{
+  approved:result.approved.reduce((n,r)=>n+Number(r.approved_submissions),0),
+  pending:result.pending.reduce((n,r)=>n+Number(r.pending_total),0),
+  calculated:result.scores.filter(r=>r.total_weighted_score!==null).length
+ }:null;
+ function download(){
+  const blob=new Blob(['\uFEFF',reportCsv(kind,rows)],{type:'text/csv;charset=utf-8'});
+  const href=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=href;a.download='iqac-'+kind+'-cycle-'+cycle+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000);
+ }
+ return <section className="reports-page">
+ <div className="report-intro"><div><span className="eyebrow">AUDIT INTELLIGENCE</span><h2>From evidence to a clear picture.</h2><p>Three cycle-specific reports, drawn from your institution’s records.</p></div><label className="field"><span>Audit cycle</span><select aria-label="Report audit cycle" value={cycle} onChange={e=>setCycle(e.target.value)}>{data.cycles.map(c=><option key={c.cycle_id} value={c.cycle_id}>{c.cycle_name}</option>)}</select></label></div>
+ <div className="report-switcher" role="tablist" aria-label="Audit reports">{Object.entries(reportDefinitions).map(([key,item],i)=><button type="button" role="tab" aria-selected={kind===key} aria-controls="audit-report" id={'report-tab-'+key} className={'report-option '+(kind===key?'selected':'')} key={key} onClick={()=>setKind(key)}><span>0{i+1}</span><div><strong>{item.title}</strong><small>{key==='approved'?'Recognize completed work':key==='pending'?'See where reviews need attention':'Compare approved performance'}</small></div><b>{totals?(key==='approved'?totals.approved:key==='pending'?totals.pending:totals.calculated):'—'}</b></button>)}</div>
+ <section className="records report-register" id="audit-report" role="tabpanel" aria-labelledby={'report-tab-'+kind}>
+ <div className="records-header"><div><h2>{definition.title}</h2><p>{selected?.cycle_name??'Choose a cycle'} · {rows.length} departments in your view</p></div><div className="filters"><button className="secondary" disabled={loading||!result} onClick={download}>Download CSV ↓</button><button className="icon-button" aria-label="Refresh report" disabled={loading||!cycle} onClick={()=>setRevision(r=>r+1)}>↻</button></div></div>
+ {error?<div role="alert" className="notice error" style={{margin:20}}>{error}</div>:loading?<div className="empty" role="status">Loading report…</div>:!cycle?<div className="empty">Create an audit cycle to begin reporting.</div>:<><div className="table-scroll"><table><thead><tr>{definition.columns.map(([key,label])=><th key={key}>{label.toUpperCase()}</th>)}</tr></thead><tbody>{rows.map(row=><tr key={row.dept_id}>{definition.columns.map(([key])=><td key={key} className={typeof row[key]==='number'?'numeric':''}>{key==='total_weighted_score'?row[key]===null?<span className="uncalculated">Not calculated</span>:<span className="report-score">{Number(row[key]).toFixed(2)} <small>/ 100</small></span>:key==='awarded_points'?Number(row[key]).toFixed(2):row[key]??'—'}</td>)}</tr>)}</tbody></table></div>{!rows.length&&<div className="empty">No departments are visible for this account.</div>}</>}
+ <div className="report-explanation"><h3>{kind==='approved'?'What counts as approved?':kind==='pending'?'Where is the review waiting?':'How to read these scores'}</h3><p>{kind==='approved'?'Only Approved faculty submissions in the selected cycle count. Departments with no approved submissions are shown with zero. Awarded points are raw submission scores, not the weighted department score.':kind==='pending'?'Submitted faculty records wait for the department HOD. Verified faculty records and Submitted or Verified department metrics wait for an Auditor. Draft, Rejected and Approved records are excluded.': 'These are stored score snapshots generated by the scoring procedure. Missing snapshots say “Not calculated”; an actual zero remains 0.00. An Auditor/Admin can refresh Active or Locked cycles from Department scores.'}</p></div>
+ </section><p className="report-scope">Faculty and HOD accounts see department summaries for their own department. Auditors and Admins see the institution.</p>
+ </section>;
+}

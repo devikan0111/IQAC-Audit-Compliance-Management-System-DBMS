@@ -19,3 +19,7 @@ desktop.ini
 # Temporary files
 *.tmp
 *.bak
+
+# Local MongoDB runtime and persistent demo data
+.runtime/
+.data/
