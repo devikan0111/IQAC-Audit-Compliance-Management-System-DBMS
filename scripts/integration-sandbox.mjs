@@ -9,8 +9,6 @@ const p=process.env,suffix=Date.now().toString(),db='iqac_qa_web_'+suffix,accoun
 let root,mongo,web,createdSchema=false,createdUser=false;
 try{
  mongo=await localMongo();
- // Initialize the real Mongo evidence if absent; existing collections are preserved.
- await runNode('scripts/setup.mjs');
  root=await mysql.createConnection({host:p.MYSQL_HOST??'127.0.0.1',port:Number(p.MYSQL_PORT??3306),user:p.MYSQL_SETUP_USER??'root',password:p.MYSQL_SETUP_PASSWORD??''});
  const [old]=await root.execute('SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME=?',[db]);assert.equal(old.length,0);
  for(const name of ['01_schema.sql','04_seed_data.sql','06_triggers.sql','07_portal.sql','09_score_calculation.sql']){

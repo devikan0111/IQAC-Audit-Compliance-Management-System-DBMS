@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IQAC · Paper lifecycle with code</title>
+<style>
+:root{--ink:#243e34;--muted:#617268;--line:#dce3dc;--green:#214d3e;--paper:#f5f7f2;--blue:#eaf1f5}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.65 Arial,sans-serif}button,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.45}header{padding:25px 36px;background:#fff;border-bottom:1px solid var(--line)}.brand{font-size:12px;letter-spacing:1.8px;font-weight:700;color:var(--muted)}h1{font-size:32px;letter-spacing:-1px;line-height:1.2;margin:8px 0}header p{margin:8px 0;color:var(--muted)}.controls{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:18px}.controls label{display:flex;gap:10px;align-items:center}select{padding:8px 12px;border:1px solid var(--line);border-radius:5px;background:white;color:var(--ink)}.demo-note{font-size:12px;color:var(--muted)}details{margin-top:18px}summary{cursor:pointer;font-weight:600}.account-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}.account{border-left:2px solid var(--line);padding:5px 12px}.account strong{display:block;font-size:12px}.account code{font-size:12px;overflow-wrap:anywhere}.account-note{font-size:12px}.layout{display:grid;grid-template-columns:225px minmax(300px,1fr) minmax(440px,1.1fr);gap:22px;padding:26px 30px;align-items:start;max-width:1800px;margin:auto}.steps{display:grid;gap:7px;max-height:790px;overflow:auto;padding:0 10px 10px 0}.step{display:grid;grid-template-columns:28px 1fr;gap:9px;text-align:left;align-items:start;width:100%;padding:10px 9px;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:5px;font-size:12px;line-height:1.5}.step .number{width:25px;height:25px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center}.step[aria-current=step]{color:var(--green);background:#e9f0e5;border-color:#c8d8c7}.step[aria-current=step] .number{background:var(--green);color:white;border-color:var(--green)}.step[aria-current=step] strong{font-weight:700}.step small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.stage{background:white;border:1px solid var(--line);padding:26px;border-radius:8px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted)}.actor{display:inline-block;background:#e9f0e5;padding:4px 10px;border-radius:4px;margin-top:13px;font-size:12px}.stage h2{font-size:29px;line-height:1.2;letter-spacing:-.6px;margin:15px 0}.stage p{margin:0 0 18px}.state{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;border-block:1px solid var(--line);padding:15px 0;margin:20px 0}.state small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}.state b{font-size:12px;line-height:1.4;display:block;margin-top:5px}.stage h3{font-size:13px;margin:23px 0 8px}.stage ul{padding-left:20px;margin:0}.stage li{margin:8px 0}.guard{background:#f8f3e8;border-left:3px solid #b18b45;padding:12px 15px;font-size:12px;margin-top:20px}.trace{font:12px/1.8 Consolas,monospace;background:#f3f6ef;padding:12px;overflow-wrap:anywhere}.viva{border-top:1px solid var(--line);padding-top:15px;margin-top:20px;font-size:13px}.viva p{margin:7px 0 0}.navigation{display:flex;justify-content:space-between;gap:10px;margin-top:25px}.navigation button{border:1px solid var(--line);border-radius:5px;padding:9px 15px;background:white;color:var(--ink)}#next{background:var(--green);color:white;border-color:var(--green)}.code-panel{background:#172820;color:#edf4eb;border-radius:8px;overflow:hidden;min-width:0}.code-heading{padding:19px 22px;border-bottom:1px solid #3a4c41}.code-heading h2{font-size:18px;margin:0 0 5px}.code-heading p{font-size:11px;color:#bccbbd;margin:0}.source-tabs{display:flex;gap:7px;flex-wrap:wrap;padding:15px 18px 7px}.source-tabs button{background:transparent;color:#c1d1c1;border:1px solid #4d6253;padding:6px 9px;font-size:11px;border-radius:4px}.source-tabs button[aria-selected=true]{background:#dce8d6;color:#203e30;border-color:#dce8d6}.file-caption{font:11px/1.6 Consolas,monospace;color:#c6d5c6;margin:10px 20px 0;overflow-wrap:anywhere}.source-code{margin:0;padding:20px 20px 22px 58px;max-height:590px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.9 Consolas,monospace}.source-code li{padding-left:9px;min-height:23px}.source-code li::marker{color:#94ad99}.code-footer{padding:14px 20px;color:#bfd0bf;border-top:1px solid #3a4c41;font-size:11px}.journey{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:11px;margin-top:15px;color:var(--muted)}.journey b{color:var(--green)}.progress-track{height:3px;background:#dce3d7;margin-top:18px}.progress-track span{height:100%;display:block;background:var(--green)}footer{max-width:1740px;margin:0 auto;padding:0 30px 28px;color:var(--muted);font-size:12px}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #78967d;outline-offset:3px}@media(max-width:1250px){.layout{grid-template-columns:190px minmax(0,1fr)}.code-panel{grid-column:2}}@media(max-width:760px){header{padding:22px}h1{font-size:27px}.layout{padding:18px;grid-template-columns:1fr}.steps{display:flex;max-height:none;overflow-x:auto;padding-bottom:12px}.step{min-width:185px}.stage{padding:22px}.code-panel{grid-column:auto}.account-list{grid-template-columns:1fr}.controls{align-items:start}.controls label{display:grid;gap:5px}.source-code{max-height:480px}.stage h2{font-size:25px}.state{gap:8px}.state small{font-size:9px}}@media print{.steps,.controls,.navigation{display:none}.layout{display:block}.stage,.code-panel{break-inside:avoid;margin:15px 0}.source-code{max-height:none}.code-panel{color:black;background:white;border:1px solid #ccc}.source-code li::marker,.file-caption,.code-heading p,.code-footer{color:#333}.source-tabs{display:none}}
+</style>
+<header>
+<div class="brand">IQAC · UNDERSTAND THE WORKFLOW</div>
+<h1>A paper, from Faculty to Auditor.</h1>
+<p>Follow the actions in front. Read the actual implementation behind each step.</p>
+<div class="controls"><label for="scenario">Lifecycle path <select id="scenario"></select></label><span class="demo-note">Guided illustration only · does not submit data or change the database</span></div>
+<div class="journey" aria-label="Main approval stages"><span>Research ready</span><span>→ <b>Draft</b></span><span>→ <b>Submitted</b></span><span>→ <b>Verified</b></span><span>→ <b>Approved</b></span></div>
+<div class="progress-track" aria-hidden="true"><span id="progress"></span></div>
+<details><summary>Demo logins for the different roles</summary><div class="account-list" id="accounts"></div><p class="account-note">All seeded accounts initially use <strong>Pass@123</strong>. For a CSE paper: Ravi → CSE HOD → Auditor. Admin can monitor but cannot approve. Your MySQL app/setup accounts are separate and are not portal logins.</p></details>
+</header>
+<main class="layout">
+<nav class="steps" id="steps" aria-label="Lifecycle steps"></nav>
+<section class="stage" aria-live="polite">
+<div class="eyebrow" id="position"></div><span class="actor" id="actor"></span><h2 id="title"></h2>
+<p id="explanation"></p>
+<div class="state" aria-label="Illustrated state"><div><small>SQL status</small><b id="sql-status"></b></div><div><small>Mongo evidence</small><b id="mongo-state"></b></div><div><small>Status log entries</small><b id="logs"></b></div></div>
+<h3>What happens</h3><ul id="actions"></ul>
+<div class="guard" id="guard"></div>
+<h3>Request and execution path</h3><div class="trace" id="trace"></div>
+<div class="viva"><strong>How to explain it</strong><p id="viva"></p></div>
+<div class="navigation"><button type="button" id="previous">← Previous</button><button type="button" id="next">Next step →</button></div>
+</section>
+<aside class="code-panel" aria-label="Actual project code behind this step">
+<div class="code-heading"><h2>Behind the scenes</h2><p>Exact excerpts from this project, with source line numbers. Choose a code layer below.</p></div>
+<div class="source-tabs" id="sources" role="tablist" aria-label="Code layer"></div>
+<div class="file-caption" id="source-file"></div>
+<ol class="source-code" id="source-code" role="tabpanel" aria-label="Selected source code"></ol>
+<div class="code-footer">A code snapshot for explanation, not executable commands. Code may need regenerating after source changes. SQL triggers guard writes; the authenticated backend supplies the trusted actor.</div>
+</aside>
+</main>
+<footer>Example: Ravi’s research-paper submission in CSE. It can list co-authors, but the current system has one SQL owner and no individual co-author credit allocation. The log count shown follows this illustrative journey, not your live database.</footer>
+<script type="application/json" id="lifecycle-data"><!--LIFECYCLE_DATA--></script>
+<script>
+(function(){
+'use strict';
+const data=JSON.parse(document.getElementById('lifecycle-data').textContent);
+const el=id=>document.getElementById(id);
+let mode='approved',index=0,sourceKey=null;
+const initial=location.hash.slice(1).split('/');
+if(data.paths[initial[0]])mode=initial[0];
+if(Number.isInteger(Number(initial[1]))&&Number(initial[1])>=0)index=Math.min(Number(initial[1]),data.paths[mode].steps.length-1);
+for(const [key,value] of Object.entries(data.paths)){const option=document.createElement('option');option.value=key;option.textContent=value.label;el('scenario').append(option);}
+for(const [role,email] of data.accounts){const item=document.createElement('div');item.className='account';const title=document.createElement('strong');title.textContent=role;const name=document.createElement('code');name.textContent=email;item.append(title,name);el('accounts').append(item);}
+function drawSource(key){
+ sourceKey=key;const entry=data.code[key];
+ el('source-file').textContent=entry.file+' · lines '+entry.line+'–'+(entry.line+entry.lines.length-1);
+ el('source-code').replaceChildren();el('source-code').start=entry.line;
+ for(const text of entry.lines){const line=document.createElement('li');const code=document.createElement('code');code.textContent=text||' ';line.append(code);el('source-code').append(line);}
+ for(const button of el('sources').querySelectorAll('button'))button.setAttribute('aria-selected',String(button.dataset.key===key));
+}
+function draw(){
+ const path=data.paths[mode].steps,step=data.steps[path[index]];
+ let logs=0,previous=null;for(let i=0;i<=index;i++){const status=data.steps[path[i]].status;if(status&&previous&&status!==previous)logs++;if(status)previous=status;}
+ el('scenario').value=mode;el('position').textContent='STEP '+(index+1)+' OF '+path.length+' · '+data.paths[mode].label.toUpperCase();
+ el('actor').textContent=step.actor;el('title').textContent=step.title;el('explanation').textContent=step.explain;
+ el('sql-status').textContent=step.status||'No submission yet';el('mongo-state').textContent=step.evidence;el('logs').textContent=String(logs);
+ el('actions').replaceChildren();for(const text of step.actions){const li=document.createElement('li');li.textContent=text;el('actions').append(li);}
+ el('guard').textContent=step.guard;el('trace').textContent=step.route;el('viva').textContent=step.viva;
+ el('previous').disabled=index===0;el('next').disabled=index===path.length-1;el('next').textContent=index===path.length-1?'Lifecycle complete':'Next step →';
+ el('progress').style.width=((index+1)/path.length*100)+'%';
+ el('steps').replaceChildren();path.forEach((key,i)=>{const item=data.steps[key],button=document.createElement('button');button.type='button';button.className='step';button.setAttribute('aria-current',i===index?'step':'false');const number=document.createElement('span');number.className='number';number.textContent=String(i+1);const text=document.createElement('span'),title=document.createElement('strong'),role=document.createElement('small');title.textContent=item.title;role.textContent=item.actor;text.append(title,role);button.append(number,text);button.onclick=()=>{index=i;draw()};el('steps').append(button)});
+ el('sources').replaceChildren();step.keys.forEach(key=>{const button=document.createElement('button');button.type='button';button.role='tab';button.dataset.key=key;button.textContent=data.code[key].label;button.onclick=()=>drawSource(key);el('sources').append(button)});
+ drawSource(step.keys.includes(sourceKey)?sourceKey:step.keys[0]);
+ try{history.replaceState(null,'','#'+mode+'/'+index)}catch{}
+}
+el('scenario').onchange=()=>{mode=el('scenario').value;index=0;sourceKey=null;draw()};
+el('previous').onclick=()=>{if(index>0){index--;draw()}};
+el('next').onclick=()=>{if(index<data.paths[mode].steps.length-1){index++;draw()}};
+document.addEventListener('keydown',event=>{if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(event.target?.tagName))return;if(event.key==='ArrowRight'){el('next').click();event.preventDefault()}if(event.key==='ArrowLeft'){el('previous').click();event.preventDefault()}});
+draw();
+})();
+</script>
+</html>

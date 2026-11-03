@@ -1,9 +1,13 @@
-Checked on 25 October 2026
-PASS: 31 local tests covering permissions, passwords, SQL parsing, seed links, scoring, reports and CSV.
-PASS: 11 live MySQL check groups using a disposable QA schema, including triggers, scoring and restricted-account row locks.
+Verified on 2 November 2026
+PASS: 41 local tests: authentication/password policy, evidence validation, SQL parsing, seed links, scoring arithmetic, reports/CSV, statistics scoping, workload calculations and register drilldowns.
 PASS: production Next.js webpack build.
-PASS: MongoDB validation and duplicate-link rejection; authenticated API integration covering SQL/Mongo CRUD, role restrictions, review history, automatic scores and logout, using disposable QA databases.
-Expected original seed scores: CSE 31.25, ECE 19.50, ME 0.00 out of 100.
-The user confirmed that the sign-in page opens. Browser checking found an initial report cycle-selection issue; fixed to select a cycle when dashboard data arrives.
-Originality and the team's ER diagram require the team's own review. No claim of awarded rubric marks or independently originated novelty is made.
-PASS: browser sign-in and all three report tabs show actual seeded data; weighted scores displayed CSE 31.25, ECE 19.50 and ME 0.00. Report layout visually inspected.
+PASS: 11 live MySQL check groups in a disposable QA schema: imports, triggers, scores, reports and restricted app permissions.
+PASS: full disposable SQL/Mongo API integration. Statistics totals/statuses/monthly creation counts matched scoped registers for Faculty, HOD, Auditor and Admin. Department/type filters, missing/empty cycles, unknown departments, zero-count departments, uncalculated scores, forbidden scope and unauthenticated requests were checked.
+PASS: existing authenticated evidence CRUD, workflow, audit history, automatic score refresh, draft withdrawal and logout regression checks.
+PASS: MongoDB type validation rejects invalid documents (121); unique SQL-link indexes reject duplicates (11000).
+The presentation database was not reset. QA schemas/accounts/data were cleaned by the harness. Statistics required no schema migration.
+Original seed: 9 records; Draft 0, Submitted 2, Verified 2, Approved 4, Rejected 1; pending 4; approval percentage 44.4%.
+Expected original score snapshots after calculation: CSE 31.25, ECE 19.50, ME 0.00.
+BROWSER LIMIT: the computer-use runtime failed before browser startup with a Windows sandbox helper setup error. New Statistics layout, keyboard interactions and chart click-through have not been visually verified in this update. Prior browser checks of the pre-Statistics app were performed on 25 October; those are not evidence for the updated UI.
+No deployment or Git push was performed. Evidence reuse, individual faculty/co-author scoring and replacing the score table with a view remain unimplemented proposals. Originality must be supported by the team's own work and evidence.
+PASS: all four delivered 11_statistics_queries.sql SELECT statements executed read-only with restricted app credentials.

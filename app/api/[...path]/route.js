@@ -1,3 +1,4 @@
+import {statistics} from '../../../lib/statistics-service.js';
 import {login,logout,userFromRequest,sessionCookie} from '../../../lib/auth.js';
 import * as service from '../../../lib/service.js';
 import {AppError,assert,integer} from '../../../lib/policy.js';
@@ -19,6 +20,7 @@ async function handle(request){
  const user=await userFromRequest(request);
  if(parts.join('/')==='auth/me'&&method==='GET')return json({user});
  if(parts[0]==='dashboard'&&method==='GET')return json(await service.dashboard(user));
+ if(parts.join('/')==='statistics'&&method==='GET'){const p=new URL(request.url).searchParams;return json(await statistics(user,{cycle_id:p.get('cycle_id'),dept_id:p.get('dept_id'),kind:p.get('kind')??'all'}));}
  if(parts.join('/')==='reports'&&method==='GET')return json(await service.reports(user,integer(new URL(request.url).searchParams.get('cycle_id'),'Cycle')));
  if(parts.join('/')==='scores/recalculate'&&method==='POST')return json(await service.recalculateScores(user,body));
  if(parts.join('/')==='evidence/sync'&&method==='POST')return json(await service.syncEvidence(user));

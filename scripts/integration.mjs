@@ -27,6 +27,47 @@ assert(facultyReport.approved.every(r=>r.dept_code==='CSE'));
 await anonymous('reports?cycle_id=1','GET',undefined,401);
 await auditor('reports?cycle_id=9999','GET',undefined,404);
 console.log('PASS: three report endpoints, zero counts, department scope and unauthenticated rejection.');
+// Statistics are compared to the actual scoped register, not just UI fixtures.
+async function checkStatistics(client,role){
+ const dash=await client('dashboard'),r=await client('statistics?cycle_id=1');
+ const records=[...dash.faculty,...dash.department].filter(x=>Number(x.cycle_id)===1);
+ assert.equal(r.summary.total,records.length,role+' total must match scoped records');
+ for(const status of ['Draft','Submitted','Verified','Approved','Rejected'])assert.equal(r.summary.counts[status],records.filter(x=>x.status===status).length,role+' '+status);
+ assert.equal(r.summary.pending,records.filter(x=>['Submitted','Verified'].includes(x.status)).length);
+ assert.equal(r.backlog.reduce((sum,d)=>sum+d.total,0),r.summary.pending);
+ const monthly={};for(const row of dash.faculty.filter(x=>Number(x.cycle_id)===1)){const m=row.created_at.slice(0,7);monthly[m]=(monthly[m]??0)+1;}
+ assert.deepEqual(Object.fromEntries(r.monthly.map(x=>[x.month,x.count])),monthly);
+ if(role==='Faculty'){assert.equal(r.scores,null);assert.equal(r.filters.kind,'faculty');assert.equal(dash.department.length,0);assert.equal(dash.scores.length,0);assert.equal(r.departments.length,1);}
+ return r;
+}
+await anonymous('statistics?cycle_id=1','GET',undefined,401);
+const institutional=await checkStatistics(auditor,'Auditor');
+assert.equal(institutional.summary.total,9);
+assert.deepEqual(institutional.summary.counts,{Draft:0,Submitted:2,Verified:2,Approved:4,Rejected:1});
+assert.equal(institutional.summary.approvalPercentage,44.4);
+await checkStatistics(admin,'Admin');await checkStatistics(hod,'HOD');
+const ownStats=await checkStatistics(faculty,'Faculty');assert.equal(ownStats.summary.total,2);
+assert.deepEqual((await faculty('reports?cycle_id=1')).scores,[]);
+assert.equal(Number((await faculty('reports?cycle_id=1')).pending[0].pending_total),1);
+await faculty('statistics?cycle_id=1&dept_id=2','GET',undefined,403);
+await hod('statistics?cycle_id=1&dept_id=2','GET',undefined,403);
+await faculty('statistics?cycle_id=1&kind=department','GET',undefined,403);
+await auditor('statistics?cycle_id=999999','GET',undefined,404);
+await auditor('statistics?cycle_id=1&dept_id=999999','GET',undefined,404);
+await auditor('statistics?cycle_id=1&kind=unknown','GET',undefined,400);
+await auditor('statistics?cycle_id=1%20OR%201=1','GET',undefined,400);
+const emptyStats=await auditor('statistics?cycle_id=2');
+assert.equal(emptyStats.summary.total,0);assert.equal(emptyStats.summary.approvalPercentage,null);assert.deepEqual(emptyStats.monthly,[]);
+assert(emptyStats.scores.every(x=>x.total_weighted_score===null));
+const zeroStats=await auditor('statistics?cycle_id=1&dept_id=3');
+assert.equal(zeroStats.summary.total,0);assert.equal(zeroStats.backlog.length,1);
+const deptStats=await auditor('statistics?cycle_id=1&dept_id=1');
+assert.equal(deptStats.summary.total,6);assert.equal(deptStats.backlog.length,1);assert.equal(deptStats.departments.length,3);
+const onlyDept=await auditor('statistics?cycle_id=1&kind=department');
+assert.equal(onlyDept.summary.total,3);assert.equal(onlyDept.monthly,null);
+const onlyFaculty=await auditor('statistics?cycle_id=1&kind=faculty');assert.equal(onlyFaculty.summary.total,6);
+console.log('PASS: statistics totals/monthly activity match scoped registers for all four roles; filters, zero/empty cycles, scores and denied requests verified.');
+
 await faculty('scores/recalculate','POST',{cycle_id:1},403);
 await auditor('scores/recalculate','POST',{cycle_id:1});
 let scorecard=(await auditor('dashboard')).scores;
@@ -85,6 +126,7 @@ const departmentHistory=await hod('department/'+did+'/logs');
 assert.deepEqual(departmentHistory.logs.map(l=>l.new_status),['Submitted','Verified','Approved']);
 await faculty('department/'+did+'/evidence','GET',undefined,403);
 await otherHod('department/'+did+'/evidence','GET',undefined,403);
+await checkStatistics(auditor,'Auditor');await checkStatistics(hod,'HOD');await checkStatistics(faculty,'Faculty');
 await faculty('auth/logout','POST',{});
 await faculty('dashboard','GET',undefined,401);
 console.log('PASS: authenticated SQL/Mongo CRUD, role restrictions, workflow, logging, withdrawal and logout.');

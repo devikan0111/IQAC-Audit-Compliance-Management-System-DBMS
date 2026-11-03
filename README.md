@@ -122,19 +122,18 @@ transaction ownership. Archived score snapshots cannot be recalculated.
 
 The API calls this procedure in the approval transaction and immediately before
 locking a cycle; failure rolls back the approval/lock. Auditor/Admin users can also
-refresh an Active/Locked cycle from the Department scores page. Faculty and HOD
-users can read only their own department scorecards. Initial scores can be generated
+refresh an Active/Locked cycle from the Department scores page. HOD users can read only their own department scorecard. Faculty accounts do not receive department scores. Initial scores can be generated
 with that refresh button after setup.
 
 ## Reports and local demo
 
-The Reports page includes approved faculty submissions, pending review work and weighted department scores by audit cycle, with CSV export. Faculty/HOD accounts see their own department; Auditor/Admin accounts see all departments. Manual equivalents are in 10_reports.sql.
+The Reports page includes approved faculty submissions, pending review work and weighted department scores by audit cycle, with CSV export. Faculty accounts see only their own submissions; HOD accounts see their department; Auditor/Admin accounts see all departments. Manual equivalents are in 10_reports.sql.
 
 After setup and a production build, run npm run demo and open http://localhost:3000. Keep the terminal open. See SETUP.md and DEMO_VIVA.md.
 
 ## Verification
 
-31 local tests, 11 live SQL check groups, the production build, MongoDB validation checks and the authenticated API integration suite passed on 25 October 2026. Integration checks used disposable QA databases. See VERIFICATION.txt for scope and browser status. The ER diagram and an authentic team contribution still require team review.
+41 local tests, 11 live SQL check groups, the production build, MongoDB validation checks and the authenticated API integration suite (including all four Statistics roles) passed on 2 November 2026. Integration checks used disposable QA databases. Browser visual checks for the new Statistics page remain unverified because the computer-use runtime failed to start. See VERIFICATION.txt for exact scope. An authentic team contribution still requires team evidence.
 
 ## Documentation
 
@@ -143,3 +142,22 @@ After setup and a production build, run npm run demo and open http://localhost:3
 - [Demo script and viva preparation](DEMO_VIVA.md)
 - [Executed verification status](VERIFICATION.txt)
 - [Manual report queries](10_reports.sql)
+
+Expanded reference: [Complete ER diagram and all attribute classifications](ER_COMPLETE.md), [printable browser reference](ER_COMPLETE.html), and [full-size vector diagram](ER_COMPLETE.svg). Includes all 11 SQL tables and a MongoDB attribute appendix.
+
+
+## Statistics and review shortcuts
+
+Statistics is the landing page: current status counts, approval percentage, department/stage backlog, monthly faculty record creation and department score charts. Filters and register shortcuts preserve cycle/department/status scope. Faculty see only their own records; HODs their department; Auditors/Admins may compare departments. Only existing HOD/Auditor review permissions grant actions. No schema migration or new dependency is required.
+
+See [Statistics definitions, access and demonstration](STATISTICS.md) and [read-only SQL equivalents](11_statistics_queries.sql). Rebuild and restart after updating the source: npm run build, then npm run demo. The demo launcher serves the built app.
+
+## Course-style ER diagram
+
+Use [the Chen diagram](ER_CHEN.html) for the academic presentation. The [one-page PDF](IQAC_ER_CHEN.pdf) shows all eight core entities, 15 relationships and their conceptual attributes in one manually arranged Chen diagram. Three app-support tables remain outside this core diagram. Earlier ER_COMPLETE files are retained as the physical implementation reference.
+
+## Paper lifecycle with supporting code
+
+Open [the lifecycle walkthrough](LIFECYCLE.html) directly in a browser. It explains the journey from a completed paper to Draft, evidence synchronization, submission, HOD verification, Auditor approval and protected records. Alternate paths cover HOD rejection, Auditor rejection and a MongoDB outage. Each step has exact current-source excerpts with file names/line numbers and a short viva explanation. Demo accounts are included. This is an offline illustration; its controls do not write to the application databases.
+
+Regenerate source excerpts after relevant code changes with npm run docs:lifecycle. The source template is docs/lifecycle.template.html and the portable generator is scripts/generate-lifecycle.mjs.

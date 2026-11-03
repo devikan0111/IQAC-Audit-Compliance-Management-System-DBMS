@@ -31,3 +31,7 @@ Use these public credentials only for the local academic demo. See DEMO_VIVA.md 
 - npm run test:integration: targets the configured running app directly and changes records; prefer test:demo for routine verification.
 
 The app uses MySQL for authoritative workflow/permissions and MongoDB for evidence documents. A durable MySQL outbox retries evidence delivery; this is not a distributed atomic transaction. Evidence attachments are URL references. The local demonstration is not a production deployment.
+
+## Statistics update
+
+For an existing configured project, run npm run build, then npm run demo. Stop an older running demo with Ctrl+C before restarting. Sign-in now opens Statistics. No schema reset, seed import, new account or package is needed. The Statistics API and older reports enforce owner-only Faculty counts; HODs see their department. See STATISTICS.md for all definitions and permissions.

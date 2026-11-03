@@ -16,7 +16,8 @@
     "db:mongo": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mongo-local.ps1",
     "test:sql": "node --env-file=.env.local scripts/sql-qa.mjs",
     "demo": "node --env-file=.env.local scripts/demo.mjs",
-    "test:demo": "node --env-file=.env.local scripts/integration-sandbox.mjs"
+    "test:demo": "node --env-file=.env.local scripts/integration-sandbox.mjs",
+    "docs:lifecycle": "node scripts/generate-lifecycle.mjs"
   },
   "dependencies": {
     "next": "^16.0.0",
